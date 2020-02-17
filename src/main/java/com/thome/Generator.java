@@ -28,8 +28,6 @@ public class Generator {
         Particle mountainCenterParticle = state.get(mountainCenterRow, mountainCenterColumn);
         mountainCenterParticle.setHeight(mountainCenterParticle.getHeight() + mountainSize - 1);
 
-        System.out.println(mountainCenterParticle.getHeight());
-
         state.rowKeySet().forEach(row -> state.columnKeySet().forEach(column -> {
             Particle thisParticle = state.get(row, column);
             int rowDiff = Math.abs(row - mountainCenterRow);
@@ -37,6 +35,23 @@ public class Generator {
             if(rowDiff <= mountainSize  && columnDiff <= mountainSize) {
                 thisParticle = generateParticle(mountainCenterParticle.getHeight() - ((columnDiff + rowDiff - 1) / 2));
             }
+            state.put(row, column, thisParticle);
+        }));
+
+        return state;
+    }
+
+    public Table<Integer, Integer, Particle> addRiver(Table<Integer, Integer, Particle> state) {
+
+        int length = state.rowKeySet().size();
+        int riverStartRow = random.nextInt(length)+1;
+        int riverStartColumn = random.nextInt(length)+1;
+        int riverEndRow = random.nextInt(length)+1;
+        int riverEndColumn = random.nextInt(length)+1;
+
+        state.rowKeySet().forEach(row -> state.columnKeySet().forEach(column -> {
+            Particle thisParticle = state.get(row, column);
+            //TODO:: River generator
             state.put(row, column, thisParticle);
         }));
 
@@ -55,10 +70,14 @@ public class Generator {
     }
 
     private Particle generateParticle(int height) {
-        if(height <= 0) {
+        if (height <= 0) {
             return new Particle(false, height, Element.WATER);
-        } else {
+        } else if (height<=2) {
             return new Particle(false, height, Element.GROUND);
+        } else if (height<=5) {
+            return new Particle(false, height, Element.HILL);
+        } else {
+            return new Particle(false, height, Element.MOUNTAIN);
         }
     }
 
