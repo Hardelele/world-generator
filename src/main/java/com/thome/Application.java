@@ -8,10 +8,19 @@ public class Application {
         Table<Integer, Integer, Particle> flatWorld = world.getState();
         flatWorld.rowKeySet().forEach(row ->{
             flatWorld.row(row).values().forEach(particle -> {
-                if(particle.getFloor().equals(Element.GROUND)) {
-                    System.out.print(particle.getHeight() + " ");
-                } else {
-                    System.out.print("W ");
+                switch (particle.getFloor()) {
+                    case HILL:
+                        System.out.print("H ");
+                        break;
+                    case WATER:
+                        System.out.print("W ");
+                        break;
+                    case GROUND:
+                        System.out.print("G ");
+                        break;
+                    case MOUNTAIN:
+                        System.out.print("M ");
+                        break;
                 }
             });
             System.out.println();
