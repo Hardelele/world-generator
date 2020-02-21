@@ -14,11 +14,14 @@ repositories {
 }
 
 dependencies {
+    compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.0.2'
     compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
+
     compileOnly 'org.projectlombok:lombok:1.18.12'
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
+
+    compile group: 'io.vertx', name: 'vertx-core', version: '3.8.5'
     implementation 'com.google.guava:guava:28.2-jre'
-    implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'

@@ -1,20 +1,21 @@
 package com.thome.services;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.thome.entities.WorldEntity;
 import com.thome.models.World;
 import com.thome.repositories.WorldRepository;
+import io.vertx.core.logging.Logger;
+import io.vertx.core.logging.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class WorldService {
 
-    private GsonBuilder builder = new GsonBuilder();
-    private Gson gson = builder.create();
+    private static final Logger LOGGER = LoggerFactory.getLogger(WorldService.class);
 
     private final GeneratorService generatorService;
     private final WorldRepository worldRepository;
@@ -40,16 +41,19 @@ public class WorldService {
      */
 
     private WorldEntity buildWorldEntity(World world, String name) {
-        String jsonWorld = gson.toJson(world);
-        WorldEntity worldEntity = gson.fromJson(jsonWorld, WorldEntity.class);
+        WorldEntity worldEntity = new WorldEntity();
+        worldEntity.setState(world.getState());
         worldEntity.setName(name);
         return worldEntity;
     }
 
     private World validateNameAndGenerate(String name) {
         if (name != null) {
+            LOGGER.info("Generating new world by key word: " + name);
             return generatorService.generateNewWorld(name);
+        } else {
+            LOGGER.info("Generating new world without key word...");
+            return generatorService.generateNewWorld();
         }
-        return generatorService.generateNewWorld();
     }
 }
