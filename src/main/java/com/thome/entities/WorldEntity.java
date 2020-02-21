@@ -8,6 +8,8 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 
+import java.util.UUID;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,6 +18,6 @@ import org.springframework.data.annotation.Id;
 public class WorldEntity extends World {
 
     @Id
-    private int id;
+    private UUID id;
     private String name;
 }
