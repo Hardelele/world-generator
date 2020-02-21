@@ -13,8 +13,8 @@ import java.util.Optional;
 @Service
 public class WorldService {
 
-    GsonBuilder builder = new GsonBuilder();
-    Gson gson = builder.create();
+    private GsonBuilder builder = new GsonBuilder();
+    private Gson gson = builder.create();
 
     private final GeneratorService generatorService;
     private final WorldRepository worldRepository;
@@ -25,13 +25,31 @@ public class WorldService {
         this.worldRepository = worldRepository;
     }
 
-    public World generateWorld(String name) {
-
-        return worldRepository.save();
+    public WorldEntity generateWorld(String name) {
+        World world = validateNameAndGenerate(name);
+        return worldRepository.save(buildWorldEntity(world, name));
     }
 
     public WorldEntity getWorldById(String id) {
         Optional<WorldEntity> worldEntity = worldRepository.findById(id);
         return worldEntity.get();
+    }
+
+    /**
+     * utils
+     */
+
+    private WorldEntity buildWorldEntity(World world, String name) {
+        String jsonWorld = gson.toJson(world);
+        WorldEntity worldEntity = gson.fromJson(jsonWorld, WorldEntity.class);
+        worldEntity.setName(name);
+        return worldEntity;
+    }
+
+    private World validateNameAndGenerate(String name) {
+        if (name != null) {
+            return generatorService.generateNewWorld(name);
+        }
+        return generatorService.generateNewWorld();
     }
 }
