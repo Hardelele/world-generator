@@ -29,7 +29,7 @@ public class GeneratorService {
     public World generateNewWorld(String key) {
         Table<Integer, Integer, Integer> worldState = TableInstance.get();
         fillWorldStateRandom(worldState);
-        World world = new World(worldState);
+        World world = new World(0, worldState);
         LOGGER.info("New world generated: " + Json.encode(world));
         return world;
     }
