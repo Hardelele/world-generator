@@ -6,6 +6,8 @@ import com.thome.services.WorldService;
 import io.vertx.core.json.Json;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 public class WorldController {
 
@@ -21,7 +23,7 @@ public class WorldController {
     }
 
     @GetMapping("/world/{id}")
-    public World getWorld(@PathVariable String id) {
+    public World getWorld(@PathVariable UUID id) {
         String jsonEntity = Json.encode(worldService.getWorldById(id));
         return (World) Json.decodeValue(jsonEntity);
     }
