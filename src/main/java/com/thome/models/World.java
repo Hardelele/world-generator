@@ -12,5 +12,7 @@ import lombok.NoArgsConstructor;
 @JsonIgnoreProperties
 public class World {
 
+    //TODO:: use for creating different sizes worlds
+    private int size;
     private Table<Integer, Integer, Integer> state;
 }
