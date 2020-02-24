@@ -5,6 +5,7 @@ import com.thome.models.WorldConfig;
 import com.thome.services.WorldService;
 import io.vertx.core.json.Json;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Mono;
 
 import java.util.UUID;
 
@@ -18,13 +19,13 @@ public class WorldController {
     }
 
     @PostMapping("/world")
-    public World generateWorld(@RequestBody WorldConfig worldConfig) {
-        return worldService.generateWorld(worldConfig.getName());
+    public Mono<World> generateWorld(@RequestBody WorldConfig worldConfig) {
+        return Mono.fromCallable(() -> worldService.generateWorld(worldConfig.getName()));
     }
 
     @GetMapping("/world/{id}")
-    public World getWorld(@PathVariable UUID id) {
+    public Mono<World> getWorld(@PathVariable UUID id) {
         String jsonEntity = Json.encode(worldService.getWorldById(id));
-        return (World) Json.decodeValue(jsonEntity);
+        return Mono.fromCallable(() -> (World) Json.decodeValue(jsonEntity));
     }
 }
