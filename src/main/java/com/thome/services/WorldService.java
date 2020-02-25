@@ -9,6 +9,8 @@ import io.vertx.core.logging.LoggerFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -28,14 +30,16 @@ public class WorldService {
         this.worldRepository = worldRepository;
     }
 
-    public WorldEntity generateWorld(String name) {
+    public Mono<WorldEntity> generateWorld(String name) {
         World world = validateNameAndGenerate(name);
-        return worldRepository.save(buildWorldEntity(world, name));
+        return Mono.fromCallable(() -> worldRepository.save(buildWorldEntity(world, name)))
+                .subscribeOn(Schedulers.elastic());
     }
 
-    public WorldEntity getWorldById(UUID id) {
+    public Mono<WorldEntity> getWorldById(UUID id) {
         Optional<WorldEntity> worldEntity = worldRepository.findById(id);
-        return worldEntity.get();
+        return Mono.fromCallable( () -> worldEntity.get())
+                .subscribeOn(Schedulers.elastic());
     }
 
     /**
